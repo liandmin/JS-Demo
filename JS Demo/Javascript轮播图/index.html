@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+    <link rel="stylesheet" href="css/css.css"/>
+</head>
+<body>
+    <div class="wrap" id="wrap">
+       <div class="slide" id="slide">
+           <ul>
+               <li><a href="#"><img src="images/slidepic1.jpg" alt=""/></a></li>
+               <li><a href="#"><img src="images/slidepic2.jpg" alt=""/></a></li>
+               <li><a href="#"><img src="images/slidepic3.jpg" alt=""/></a></li>
+               <li><a href="#"><img src="images/slidepic4.jpg" alt=""/></a></li>
+               <li><a href="#"><img src="images/slidepic5.jpg" alt=""/></a></li>
+           </ul>
+           <div class="arrow" id="arrow">
+               <a href="javascript:;" class="prev"></a>
+               <a href="javascript:;" class="next"></a>
+           </div>
+       </div>
+    </div>
+</body>
+</html>
+<script src="js/animate.js" type="text/javascript"></script>
+<script>
+    var wrap = document.getElementById("wrap");
+    var arrow = document.getElementById("arrow");
+    var slider = document.getElementById("slide");
+    var lis = slider.getElementsByTagName("li");
+    wrap.onmouseover = function() {
+         animate(arrow,{'opacity':100});
+    }
+    wrap.onmouseout = function() {
+        animate(arrow,{'opacity':0});
+    }
+    var json = [
+        {
+            width:400,
+            top:20,
+            left:50,
+            opacity:20,
+            z:2
+        },
+        {
+            width:600,
+            top:70,
+            left:0,
+            opacity:80,
+            z:3
+        },
+        {
+            width:800,
+            top:100,
+            left:200,
+            opacity:100,
+            z:4
+        },
+        {
+            width:600,
+            top:70,
+            left:600,
+            opacity:80,
+            z:3
+        },
+        {
+            width:400,
+            top:20,
+            left:750,
+            opacity:20,
+            z:2
+        }
+    ];
+    // 函数节流
+    var jieliu = true; //  用来控制函数节奏的变量
+    var as = arrow.children;
+    change();
+    for(var k in as) {
+        as[k].onclick = function() {
+            if(this.className == "prev") {
+                if(jieliu == true) {
+                    change(false);
+                    jieliu = false;  // 点击完毕之后，立马取反
+                }
+            }
+            else {
+                if(jieliu == true) {
+                    change(true);
+                    jieliu = false;
+                }
+            }
+        }
+    }
+    function change(flag) {
+        if(flag) {
+             json.unshift(json.pop());
+        }
+        else {
+            json.push(json.shift());
+        }
+    for(var i=0;i<json.length; i++) {
+            animate(lis[i],{
+                width: json[i].width,
+                top: json[i].top,
+                left: json[i].left,
+                opacity:json[i].opacity,
+                zIndex:json[i].z
+            },function(){ jieliu = true;})  // 回调函数是等动画执行完毕才行
+        }
+    }
+
+</script>
